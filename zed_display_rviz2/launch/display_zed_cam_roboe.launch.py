@@ -12,6 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Adapted by Jin Rhee Mar 2026
+# For Roboe Technology task
+
 import os
 
 from ament_index_python.packages import get_package_share_directory
@@ -89,25 +92,25 @@ def launch_setup(context, *args, **kwargs):
         condition=IfCondition(start_zed_node)
     )
 
+    # HSV Color segmentation node
+    pose_estimate_node = Node(
+        package='pose_estimator',
+        executable='hsv_threshold.py',
+    )
+    
     # Publish static tf to anchor camera
     static_tf_node = Node(
         package='tf2_ros',
         executable='static_transform_publisher',
         name='static_transform_publisher',
-        arguments=['1.0', '0.0', '1.0', '-0.4226183', '0', '0.9063078', '0', 'map', 'zed_camera_link'],
+        arguments=['1.0', '0.0', '1.0', '0.0', '-50.0', '180.0', 'map', 'zed_camera_link'],
     )
-    
-    pose_estimator_launch = IncludeLaunchDescription(
-        launch_description_source=PythonLaunchDescriptionSource([
-            get_package_share_directory('pose_estimator'),
-            '/launch/cube_pose_estimator.launch.py'
-        ])
-    )
+
     return [
         rviz2_node,
         zed_wrapper_launch,
-        static_tf_node,
-        pose_estimator_launch
+        pose_estimate_node,
+        static_tf_node
     ]
 
 
