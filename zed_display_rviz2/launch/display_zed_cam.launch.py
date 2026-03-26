@@ -107,7 +107,7 @@ def launch_setup(context, *args, **kwargs):
         rviz2_node,
         zed_wrapper_launch,
         static_tf_node,
-        # pose_estimator_launch
+        pose_estimator_launch
     ]
 
 
